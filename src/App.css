@@ -1,0 +1,21 @@
+.rightpane{
+  width: 30vw;
+  height: 100vh;
+  border-radius: 28px 0 0 28px;
+  background: #829099;
+  float: right;
+  overflow: auto;
+  padding: 0 0 0 3vw;
+}
+
+.leftpane{
+  background: #525441;
+  width: 65vw;
+  height: 100vh;
+  float: left;
+  border-radius: 0 28px 28px 0;
+}
+
+.buildingName {
+  font-weight: bolder;
+}
