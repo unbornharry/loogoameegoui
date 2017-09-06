@@ -21,7 +21,7 @@ class monitoredMeetingRooms extends Component {
         this.drop = this.drop.bind(this);
     }
 
-    static allowDrop(e) {
+    allowDrop(e) {
         e.preventDefault();
     }
 

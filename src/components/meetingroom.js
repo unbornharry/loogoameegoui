@@ -66,7 +66,7 @@ export default class meetingroom extends Component {
     componentWillUnmount() {
         clearInterval(this.interval);
     }
-    static drag(e){
+    drag(e){
         e.dataTransfer.setData('text', e.target.id);
     }
     hover(){
@@ -92,14 +92,12 @@ export default class meetingroom extends Component {
                  onMouseOver={this.hover}
                  onMouseOut={this.unHover}>
                 <div style={floatleft}>{meetingroomdisplayname}</div>
-                {/*<div style={floatright}>*/}
-                    <CircularProgressbar style={floatright}
-                        percentage={occupantcount/occupancy * 100}
-                        strokeWidth={15}
-                        initialAnimation={true}
-                        textForPercentage={(pct)=>pct}
-                    />
-                {/*</div>*/}
+                <CircularProgressbar style={floatright}
+                    percentage={occupantcount/occupancy * 100}
+                    strokeWidth={15}
+                    initialAnimation={true}
+                    textForPercentage={(pct)=>pct}
+                />
             </div>
         );
     }

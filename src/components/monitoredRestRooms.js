@@ -35,7 +35,7 @@ class monitoredMeetingRooms extends Component {
         this.getStyle = this.getStyle.bind(this);
     }
 
-    static allowDrop(e) {
+    allowDrop(e) {
         e.preventDefault();
     }
 
@@ -49,7 +49,7 @@ class monitoredMeetingRooms extends Component {
             });
     }
 
-    static getStyle(gender){
+    getStyle(gender){
         if(gender === 'male')
             return styleMens;
         else if(gender === 'female')

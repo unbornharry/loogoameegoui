@@ -38,7 +38,7 @@ export default class building extends Component {
         this.hover = this.hover.bind(this);
         this.unHover = this.unHover.bind(this);
     }
-    static dragStart(e){
+    dragStart(e){
         let transferData = {"buildingid" : e.target.id };
         e.dataTransfer.setData('text', JSON.stringify(transferData));
     }

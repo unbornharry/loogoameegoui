@@ -7,7 +7,7 @@ import MonitoredRestRooms from './monitoredRestRooms';
 import Rightpane from './rightpane';
 
  class container extends Component {
-    static render() {
+    render() {
         const genders = [{gender: 'male'},{gender: 'female'}];
         return (
             <DragDropContextProvider backend={HTML5Backend}>
