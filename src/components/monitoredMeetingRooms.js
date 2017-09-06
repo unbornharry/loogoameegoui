@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import MapComponents from 'react-map-components';
 import Meetingroom from './meetingroom';
+import Background from '../images/meetingroom.png';
 
 const style = {
     background: '#525441',
     width: '65vw',
     margin: '49vh 0 1vh 1vh',
-    height: '50vh',
+    height: '45vh',
     float: 'left',
     borderRadius: '28px',
+    top: '4.5vh',
     position: 'absolute',
-    overflow: 'auto'
+    overflow: 'auto',
+    backgroundImage: `url(${Background})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center'
 };
 
 class monitoredMeetingRooms extends Component {

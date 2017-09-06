@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import MapComponents from 'react-map-components';
 import Restroom from './restroom';
+import Mensrooms from '../images/mensrooms.png';
+import Womensrooms from '../images/womensrooms.png';
 
 const styleMens = {
     background: '#525441',
@@ -10,7 +12,11 @@ const styleMens = {
     float: 'left',
     borderRadius: '28px',
     lineHeight: '312h',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+    backgroundImage: `url(${Mensrooms})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center'
+
 };
 
 const styleWomens = {
@@ -22,7 +28,10 @@ const styleWomens = {
     borderRadius: '28px',
     fontSize: '30px',
     lineHeight: '32vh',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundImage: `url(${Womensrooms})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center'
 };
 
 

@@ -17,7 +17,7 @@ const meetingroomStyle = {
 
 const meetingroomHoverStyle = {
     float: 'left',
-    background: '#4286f4',
+    background: 'white',
     borderRadius: '30px',
     color: '#5c455c',
     fontSize: '20px',
@@ -84,6 +84,7 @@ export default class meetingroom extends Component {
     }
     render() {
         let { meetingroomid, meetingroomname, meetingroomdisplayname, occupantcount, occupancy } = this.props;
+        // const pctDisplay = occupantcount + "/" + occupancy;
         return (
             <div type="meetingroom"
                  id={meetingroomid}
@@ -96,7 +97,7 @@ export default class meetingroom extends Component {
                     percentage={occupantcount/occupancy * 100}
                     strokeWidth={15}
                     initialAnimation={true}
-                    textForPercentage={(pct)=>pct}
+                    textForPercentage={(pctDisplay)=>pctDisplay}
                 />
             </div>
         );
