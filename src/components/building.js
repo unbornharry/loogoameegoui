@@ -26,6 +26,10 @@ const buildingHoverStyle = {
     margin: '5px',
 };
 
+const buildingNameStyle = {
+    fontWeight: 'bolder'
+};
+
 export default class building extends Component {
     constructor(props){
         super(props);
@@ -34,7 +38,7 @@ export default class building extends Component {
         this.hover = this.hover.bind(this);
         this.unHover = this.unHover.bind(this);
     }
-    dragStart(e){
+    static dragStart(e){
         let transferData = {"buildingid" : e.target.id };
         e.dataTransfer.setData('text', JSON.stringify(transferData));
     }
@@ -63,7 +67,7 @@ export default class building extends Component {
                  onDragStart={this.dragStart}
                  onMouseOver={this.hover}
                  onMouseOut={this.unHover}>
-                <div className="buildingName">{buildingname}</div>
+                <div style={buildingNameStyle}>{buildingname}</div>
                 <div>{address1}</div>
                 <div>{city}</div>
                 <div>{state}</div>

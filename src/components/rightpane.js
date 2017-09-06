@@ -3,14 +3,27 @@ import Building from './building';
 import MapComponents from 'react-map-components';
 
 const searchStyle = {
-    width: '20vw',
+    width: '25vw',
     position: 'relative',
     align: 'center',
-    radius: '8px',
+    borderRadius: '8px',
     height: '30px',
     fontSize: 'large',
     textAlign: 'center',
     margin: '20px 0 20px 0'
+};
+
+const rightpaneStyle = {
+    left: '66vw',
+    position: 'absolute',
+    width: '30vw',
+    height: '98vh',
+    borderRadius: '28px',
+    background: '#829099',
+    float: 'right',
+    overflow: 'auto',
+    padding: '0 0 0 3vw',
+    margin: '1vh 1vw 1vh 0',
 };
 
 class rightpane extends Component {
@@ -36,7 +49,7 @@ class rightpane extends Component {
 
     render() {
         return (
-                <div className="rightpane">
+                <div style={rightpaneStyle}>
                     <input type="text"
                            style={searchStyle}
                            ref="searchQueryInput"

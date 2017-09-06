@@ -1,43 +1,41 @@
 import React, { Component } from 'react';
 import MapComponents from 'react-map-components';
-import Restroom from './restroom';
+import Meetingroom from './meetingroom';
 
 const style = {
     background: '#525441',
-    width: '64vw',
+    width: '65vw',
     margin: '49vh 0 1vh 1vh',
     height: '50vh',
     float: 'left',
     borderRadius: '28px',
-    position: 'absolute'
+    position: 'absolute',
+    overflow: 'auto'
 };
 
 class monitoredMeetingRooms extends Component {
 
     constructor(props){
         super(props);
-        this.state = {restrooms: []};
+        this.state = {meetingrooms: []};
         this.drop = this.drop.bind(this);
     }
 
-    allowDrop(e) {
+    static allowDrop(e) {
         e.preventDefault();
     }
 
     drop(e){
-        fetch('/restroom?buildingid=1')
+        let data = JSON.parse(e.dataTransfer.getData('text'));
+        fetch('/meetingroom?buildingid=' + data.buildingid)
             .then(res => res.json())
-            .then(restrooms => this.setState({ restrooms }));
-        let data = e.dataTransfer.getData('text');
-        console.log(data);
-        // // e.target.appendChild(document.getElementById(data));
-
+            .then(meetingrooms => this.setState({ meetingrooms }));
     }
 
     render() {
         return (
             <div onDragOver={this.allowDrop} onDrop={this.drop} style={style}>
-                <MapComponents component={Restroom} for={this.state.restrooms} />
+                <MapComponents component={Meetingroom} for={this.state.meetingrooms} />
             </div>
         );
     }

@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { DragDropContextProvider } from 'react-dnd';
+import Mapcomponents from 'react-map-components';
 import HTML5Backend from 'react-dnd-html5-backend';
 import MonitoredMeetingRooms from './monitoredMeetingRooms';
-import MonitoredMensRooms from './monitoredMensRooms';
+import MonitoredRestRooms from './monitoredRestRooms';
 import Rightpane from './rightpane';
 
-export default class Container extends Component {
-    render() {
+ class container extends Component {
+    static render() {
+        const genders = [{gender: 'male'},{gender: 'female'}];
         return (
             <DragDropContextProvider backend={HTML5Backend}>
                 <div>
-                    <MonitoredMensRooms />
+                    <Mapcomponents component={MonitoredRestRooms} for={genders} />
                     <MonitoredMeetingRooms />
                     <Rightpane />
                 </div>
@@ -18,3 +20,5 @@ export default class Container extends Component {
         );
     }
 }
+
+export default container;

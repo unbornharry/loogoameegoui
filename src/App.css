@@ -1,21 +1,26 @@
-.rightpane{
-  width: 30vw;
-  height: 100vh;
-  border-radius: 28px 0 0 28px;
-  background: #829099;
-  float: right;
-  overflow: auto;
-  padding: 0 0 0 3vw;
+.CircularProgressbar {
+    /*
+     * This fixes an issue where the CircularProgressbar svg has
+     * 0 width inside a "display: flex" container, and thus not visible.
+     *
+     * If you're not using "display: flex", you can remove this style.
+     */
+    width: 20%;
 }
 
-.leftpane{
-  background: #525441;
-  width: 65vw;
-  height: 100vh;
-  float: left;
-  border-radius: 0 28px 28px 0;
+.CircularProgressbar .CircularProgressbar-path {
+    stroke: #3e98c7;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.5s ease 0s;
 }
 
-.buildingName {
-  font-weight: bolder;
+.CircularProgressbar .CircularProgressbar-trail {
+    stroke: #d6d6d6;
+}
+
+.CircularProgressbar .CircularProgressbar-text {
+   fill: #3e98c7;
+   font-size: 20px;
+   dominant-baseline: central;
+   text-anchor: middle;
 }
