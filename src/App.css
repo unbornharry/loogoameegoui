@@ -24,3 +24,7 @@
    dominant-baseline: central;
    text-anchor: middle;
 }
+
+.CircularProgressbar-text{
+    font-size: 20px;
+}

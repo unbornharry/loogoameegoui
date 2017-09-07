@@ -7,7 +7,7 @@ import Womensrooms from '../images/womensrooms.png';
 const styleMens = {
     background: '#525441',
     width: '32vw',
-    margin: '1vh 0 1vh 1vh',
+    margin: '1vh 1vw 1vh 1vw',
     height: '47vh',
     float: 'left',
     borderRadius: '28px',
@@ -21,8 +21,8 @@ const styleMens = {
 
 const styleWomens = {
     background: '#525441',
-    width: '32vw',
-    margin: '1vh 0 1vh 1vh',
+    width: '31vw',
+    margin: '1vh 1vw 1vh 0',
     height: '47vh',
     float: 'left',
     borderRadius: '28px',

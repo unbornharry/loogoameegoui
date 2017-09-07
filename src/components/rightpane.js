@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Building from './building';
 import MapComponents from 'react-map-components';
+import buildingImage from '../images/building.png';
 
 const searchStyle = {
     width: '25vw',
@@ -17,13 +18,16 @@ const rightpaneStyle = {
     left: '66vw',
     position: 'absolute',
     width: '30vw',
-    height: '98vh',
+    height: '97vh',
     borderRadius: '28px',
-    background: '#829099',
+    background: '#525441',
     float: 'right',
     overflow: 'auto',
     padding: '0 0 0 3vw',
     margin: '1vh 1vw 1vh 0',
+    backgroundImage: `url(${buildingImage})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center'
 };
 
 class rightpane extends Component {

@@ -5,12 +5,11 @@ import Background from '../images/meetingroom.png';
 
 const style = {
     background: '#525441',
-    width: '65vw',
-    margin: '49vh 0 1vh 1vh',
-    height: '45vh',
+    width: '64vw',
+    margin: '49vh 0 1vh 1vw',
+    height: '49vh',
     float: 'left',
     borderRadius: '28px',
-    top: '4.5vh',
     position: 'absolute',
     overflow: 'auto',
     backgroundImage: `url(${Background})`,

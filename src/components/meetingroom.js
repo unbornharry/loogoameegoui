@@ -6,13 +6,12 @@ const meetingroomStyle = {
     float: 'left',
     background: '#e3e5e6',
     borderRadius: '30px',
-    color: '#5c455c',
-    fontSize: '20px',
+    color: 'red',
+    fontSize: '18px',
     textDecoration: 'none',
     width: '300px',
     height: '60px',
-    margin: '5px',
-
+    margin: '5px'
 };
 
 const meetingroomHoverStyle = {
@@ -20,7 +19,31 @@ const meetingroomHoverStyle = {
     background: 'white',
     borderRadius: '30px',
     color: '#5c455c',
-    fontSize: '20px',
+    fontSize: '18px',
+    textDecoration: 'none',
+    width: '300px',
+    height: '60px',
+    margin: '5px'
+};
+
+const meetingroomAvailableStyle = {
+    float: 'left',
+    background: 'white',
+    borderRadius: '30px',
+    color: 'green',
+    fontSize: '18px',
+    textDecoration: 'none',
+    width: '300px',
+    height: '60px',
+    margin: '5px'
+};
+
+const meetingroomReservedStyle = {
+    float: 'left',
+    background: 'yellow',
+    borderRadius: '30px',
+    color: 'green',
+    fontSize: '18px',
     textDecoration: 'none',
     width: '300px',
     height: '60px',
@@ -46,10 +69,11 @@ const floatright = {
 export default class meetingroom extends Component {
     constructor(props){
         super(props);
-        this.state = {hover: false, status: this.props.status};
+        this.state = {hover: false, reserved: this.props.reserved, occupantcount: this.props.occupantcount};
         this.drag = this.drag.bind(this);
         this.hover = this.hover.bind(this);
         this.unHover = this.unHover.bind(this);
+        this.reserve = this.reserve.bind(this);
     }
     componentDidMount() {
         setInterval(function() {
@@ -59,9 +83,9 @@ export default class meetingroom extends Component {
                     console.error("error occurred:" + err);
                     return "error";
                 }
-                this.setState({status: res.body[0].status});
+                this.setState({occupantcount: res.body[0].occupantcount, reserved: res.body[0].reserved});
             }.bind(this));
-        }.bind(this), 10000);
+        }.bind(this), 5000);
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -75,29 +99,62 @@ export default class meetingroom extends Component {
     unHover(){
         this.setState({hover: false});
     }
+    reserve() {
+        if (this.state.occupantcount === 0 && this.state.reserved === 'unreserved') {
+            const reserveMeetingroomResponse = request.put('/meetingroom/' + this.props.meetingroomid + '/reserve');
+            reserveMeetingroomResponse.end(function (err, res) {
+                if (err) {
+                    console.error("error occurred:" + err);
+                    return "error";
+                }
+                if (res.statusCode === 200) {
+                    this.setState({reserved: 'reserved'});
+                }
+            }.bind(this));
+
+
+        }
+        else if (this.state.occupantcount === 0 && this.state.reserved === 'reserved'){
+            const unreserveMeetingroomResponse = request.put('/meetingroom/' + this.props.meetingroomid + '/unreserve');
+            unreserveMeetingroomResponse.end(function (err, res) {
+                if (err) {
+                    console.error("error occurred:" + err);
+                    return "error";
+                }
+                if (res.statusCode === 200) {
+                    this.setState({reserved: 'unreserved'});
+                }
+            }.bind(this));
+         }
+    }
     getmeetingroomStyle(){
-        if (this.state.hover) {
+        if(this.state.occupantcount === 0 && this.state.reserved === 'unreserved'){
+            return meetingroomAvailableStyle;
+        }
+        else if (this.state.occupantcount === 0 && this.state.reserved === 'reserved')
+            return meetingroomReservedStyle;
+        else if (this.state.hover) {
             return meetingroomHoverStyle;
-        } else {
+        } else if (!this.state.hover){
             return meetingroomStyle;
         }
     }
     render() {
-        let { meetingroomid, meetingroomname, meetingroomdisplayname, occupantcount, occupancy } = this.props;
-        // const pctDisplay = occupantcount + "/" + occupancy;
+        let { meetingroomid, meetingroomname, meetingroomdisplayname, occupancy } = this.props;
         return (
             <div type="meetingroom"
                  id={meetingroomid}
                  style={this.getmeetingroomStyle()}
                  key={meetingroomname}
                  onMouseOver={this.hover}
-                 onMouseOut={this.unHover}>
-                <div style={floatleft}>{meetingroomdisplayname}</div>
+                 onMouseOut={this.unHover}
+                onDoubleClick={this.reserve}>
+                <div style={floatleft}>{meetingroomdisplayname} ({occupancy})</div>
                 <CircularProgressbar style={floatright}
-                    percentage={occupantcount/occupancy * 100}
+                    percentage={Math.floor(this.state.occupantcount/occupancy * 100)}
                     strokeWidth={15}
                     initialAnimation={true}
-                    textForPercentage={(pctDisplay)=>pctDisplay}
+                    textForPercentage={(pct)=>pct}
                 />
             </div>
         );

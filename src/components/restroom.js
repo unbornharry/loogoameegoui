@@ -6,7 +6,7 @@ const restroomStyle = {
     background: '#e3e5e6',
     borderRadius: '35px',
     color: '#5c455c',
-    fontSize: '20px',
+    fontSize: '18px',
     textDecoration: 'none',
     width: '300px',
     height: '50px',
@@ -19,7 +19,7 @@ const restroomHoverStyle = {
     background: '#4286f4',
     borderRadius: '35px',
     color: '#5c455c',
-    fontSize: '20px',
+    fontSize: '18px',
     textDecoration: 'none',
     width: '300px',
     height: '50px',
@@ -41,6 +41,9 @@ const restroomImageGreenStyle = {
     width: '50px',
     height: '50px',
     lineHeight: '50px',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    objectFit: 'contain',
     verticalAlign: 'middle',
     background: 'green',
     borderRadius: '25px'
@@ -51,6 +54,9 @@ const restroomImageRedStyle = {
     width: '50px',
     height: '50px',
     lineHeight: '50px',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    objectFit: 'contain',
     verticalAlign: 'middle',
     background: 'red',
     borderRadius: '25px'
@@ -61,6 +67,9 @@ const restroomImageBlackStyle = {
     width: '50px',
     height: '50px',
     lineHeight: '50px',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    objectFit: 'contain',
     verticalAlign: 'middle',
     background: 'black',
     borderRadius: '25px'
@@ -88,7 +97,7 @@ export default class restroom extends Component {
                 }
                 this.setState({status: res.body[0].status});
             }.bind(this));
-        }.bind(this), 10000);
+        }.bind(this), 5000);
     }
     componentWillUnmount() {
         clearInterval(this.interval);
