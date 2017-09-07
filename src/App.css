@@ -20,11 +20,7 @@
 
 .CircularProgressbar .CircularProgressbar-text {
    fill: #3e98c7;
-   font-size: 20px;
+   font-size: 30px;
    dominant-baseline: central;
    text-anchor: middle;
-}
-
-.CircularProgressbar-text{
-    font-size: 20px;
 }

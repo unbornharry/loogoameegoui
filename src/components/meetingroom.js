@@ -169,7 +169,7 @@ export default class meetingroom extends Component {
                     percentage={Math.floor(this.state.occupantcount/occupancy * 100)}
                     strokeWidth={15}
                     initialAnimation={true}
-                    textForPercentage={(pct)=>pct}
+                    // textForPercentage={(pct)=>pct}
                 />
             </div>
         );
