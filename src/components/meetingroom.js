@@ -14,16 +14,28 @@ const meetingroomStyle = {
     margin: '5px'
 };
 
-const meetingroomHoverStyle = {
+const meetingroomUsedStyle = {
     float: 'left',
-    background: 'white',
+    background: '#e3e5e6',
     borderRadius: '30px',
-    color: '#5c455c',
+    color: 'red',
     fontSize: '18px',
     textDecoration: 'none',
     width: '300px',
     height: '60px',
     margin: '5px'
+};
+
+const meetingroomHoverStyle = {
+    float: 'left',
+    background: 'white',
+    borderRadius: '30px',
+    fontSize: '18px',
+    textDecoration: 'none',
+    width: '300px',
+    height: '60px',
+    margin: '5px',
+    boxShadow: '10px 10px 5px #888888'
 };
 
 const meetingroomAvailableStyle = {
@@ -128,12 +140,15 @@ export default class meetingroom extends Component {
          }
     }
     getmeetingroomStyle(){
-        if(this.state.occupantcount === 0 && this.state.reserved === 'unreserved'){
+        if(this.state.occupantcount === 0 && this.state.reserved === 'unreserved')
             return meetingroomAvailableStyle;
-        }
         else if (this.state.occupantcount === 0 && this.state.reserved === 'reserved')
             return meetingroomReservedStyle;
-        else if (this.state.hover) {
+        else if (this.state.occupantcount !== 0)
+            return meetingroomUsedStyle;
+    }
+    getmeetingroomHoverStyle(){
+        if (this.state.hover) {
             return meetingroomHoverStyle;
         } else if (!this.state.hover){
             return meetingroomStyle;
@@ -144,7 +159,7 @@ export default class meetingroom extends Component {
         return (
             <div type="meetingroom"
                  id={meetingroomid}
-                 style={this.getmeetingroomStyle()}
+                 style={{...this.getmeetingroomHoverStyle(), ...this.getmeetingroomStyle() }}
                  key={meetingroomname}
                  onMouseOver={this.hover}
                  onMouseOut={this.unHover}
