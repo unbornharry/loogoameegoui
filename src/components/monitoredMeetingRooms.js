@@ -33,7 +33,11 @@ class monitoredMeetingRooms extends Component {
         let data = JSON.parse(e.dataTransfer.getData('text'));
         fetch('/meetingroom?buildingid=' + data.buildingid)
             .then(res => res.json())
-            .then(meetingrooms => this.setState({ meetingrooms }));
+            .then(newmeetingrooms => {
+                let meetingrooms = this.state.meetingrooms.concat(newmeetingrooms);
+                this.setState({ meetingrooms });
+            });
+            // .then(meetingrooms => this.setState({ meetingrooms }));
     }
 
     render() {
