@@ -15,7 +15,8 @@
     "react-circular-progressbar": "^0.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=5001 && react-scripts start",
+    "ubuntustart": "PORT=5001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
