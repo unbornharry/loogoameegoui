@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "set PORT=5001 && react-scripts start",
-    "ubuntustart": "PORT=80 react-scripts start",
+    "ubuntustart": "PUBLIC_URL=http://loogoameego.ssedev.io PORT=80 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
