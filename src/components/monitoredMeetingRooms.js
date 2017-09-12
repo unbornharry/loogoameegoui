@@ -37,7 +37,6 @@ class monitoredMeetingRooms extends Component {
                 let meetingrooms = this.state.meetingrooms.concat(newmeetingrooms);
                 this.setState({ meetingrooms });
             });
-            // .then(meetingrooms => this.setState({ meetingrooms }));
     }
 
     render() {

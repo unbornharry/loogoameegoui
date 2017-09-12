@@ -118,11 +118,11 @@ export default class restroom extends Component {
             return('../images/Women.png');
     }
     getIconStyle(status){
-        if(status === 'Active')
+        if(status === 'active')
             return (restroomImageGreenStyle);
-        else if(status === 'Closed for cleaning')
+        else if(status === 'closed for cleaning')
             return (restroomImageRedStyle);
-        else if(status === 'Under maintenance')
+        else if(status === 'under service')
             return(restroomImageBlackStyle);
         else
             return (restroomImageGreenStyle);
