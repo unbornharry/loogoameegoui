@@ -8,15 +8,17 @@
     "react-dnd-html5-backend": "^2.4.1",
     "react-map-components": "^1.0.12",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.12",
+    "react-scripts": "^1.0.13",
     "superagent": "^3.5.2",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1",
-    "react-circular-progressbar": "^0.1.4"
+    "react-circular-progressbar": "^0.1.4",
+    "concurrently": "^3.5.0",
+    "http-proxy": "^1.16.2"
   },
   "scripts": {
     "start": "set PORT=5001 && react-scripts start",
-    "ubuntustart": "PORT=80 react-scripts start",
+    "ubuntustart": "concurrently \"node proxy-server.js\" \"PORT=5001 react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
