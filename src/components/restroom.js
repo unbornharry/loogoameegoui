@@ -122,7 +122,7 @@ export default class restroom extends Component {
             return (restroomImageGreenStyle);
         else if(status === 'Closed for cleaning')
             return (restroomImageRedStyle);
-        else if(status === 'In Service')
+        else if(status === 'Under maintenance')
             return(restroomImageBlackStyle);
         else
             return (restroomImageGreenStyle);
