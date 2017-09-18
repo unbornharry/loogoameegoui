@@ -123,8 +123,6 @@ export default class meetingroom extends Component {
                     this.setState({reserved: 'reserved'});
                 }
             }.bind(this));
-
-
         }
         else if (this.state.occupantcount === 0 && this.state.reserved === 'reserved'){
             const unreserveMeetingroomResponse = request.put('/meetingroom/' + this.props.meetingroomid + '/unreserve');
