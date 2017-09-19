@@ -164,10 +164,11 @@ export default class meetingroom extends Component {
                 onDoubleClick={this.reserve}>
                 <div style={floatleft}>{meetingroomdisplayname} ({occupancy})</div>
                 <CircularProgressbar style={floatright}
-                    percentage={Math.floor(this.state.occupantcount/occupancy * 100)}
+                    percentage={Math.floor(this.state.occupantcount/this.props.occupancy * 100) > 100 ? 100 : Math.floor(this.state.occupantcount/this.props.occupancy * 100)}
                     strokeWidth={15}
                     initialAnimation={true}
-                    // textForPercentage={(pct)=>pct}
+                    classForPercentage={(percent) => percent < 100 ? 'incomplete' : 'complete'}
+                    textForPercentage={(pct) => this.state.occupantcount}
                 />
             </div>
         );
