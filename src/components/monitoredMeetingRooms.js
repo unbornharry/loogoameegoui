@@ -33,9 +33,9 @@ class monitoredMeetingRooms extends Component {
     componentDidMount() {
         setInterval(function() {
             let allMeetingrooms = [];
-            for(let buildingid in this.state.buildingids){
+            for(let buildingid of this.state.buildingids){
                 const newMeetingroomsResponse = request('GET', '/meetingroom?buildingid=' + buildingid);
-                allMeetingrooms = allMeetingrooms.concat(newMeetingroomsResponse.body);
+                allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
             }
             this.setState({meetingrooms: allMeetingrooms });
         }.bind(this), 5000);
@@ -49,9 +49,9 @@ class monitoredMeetingRooms extends Component {
         let data = JSON.parse(e.dataTransfer.getData('text'));
         let allMeetingrooms = [];
         this.state.buildingids.push(data.buildingid);
-        for(let buildingid in this.state.buildingids){
+        for(let buildingid of this.state.buildingids){
             const newMeetingroomsResponse = request('GET', '/meetingroom?buildingid=' + buildingid);
-            allMeetingrooms = allMeetingrooms.concat(newMeetingroomsResponse.body);
+            allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
         }
         this.setState({meetingrooms: allMeetingrooms });
     }
