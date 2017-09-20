@@ -3,6 +3,7 @@ import MapComponents from 'react-map-components';
 import Restroom from './restroom';
 import Mensrooms from '../images/mensrooms.png';
 import Womensrooms from '../images/womensrooms.png';
+let request = require('sync-request');
 
 const styleMens = {
     background: '#525441',
@@ -35,11 +36,11 @@ const styleWomens = {
 };
 
 
-class monitoredMeetingRooms extends Component {
+class monitoredRestRooms extends Component {
 
     constructor(props){
         super(props);
-        this.state = {restrooms: [], buildings: []};
+        this.state = {restrooms: [], buildingids: []};
         this.drop = this.drop.bind(this);
         this.getStyle = this.getStyle.bind(this);
     }
@@ -48,14 +49,30 @@ class monitoredMeetingRooms extends Component {
         e.preventDefault();
     }
 
+    componentDidMount() {
+        setInterval(function() {
+            let allRestrooms = [];
+            for(let buildingid of this.state.buildingids){
+                const newRestroomsResponse = request('GET', '/restroom?gender=' + this.props.gender + '&buildingid=' + buildingid);
+                allRestrooms = allRestrooms.concat(JSON.parse(newRestroomsResponse.body));
+            }
+            this.setState({restrooms: allRestrooms });
+        }.bind(this), 5000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     drop(e){
         let data = JSON.parse(e.dataTransfer.getData('text'));
-        fetch('/restroom?gender=' + this.props.gender + '&buildingid=' + data.buildingid)
-            .then(res => res.json())
-            .then(newrestrooms => {
-                let restrooms = this.state.restrooms.concat(newrestrooms);
-                this.setState({ restrooms });
-            });
+        let allRestrooms = [];
+        this.state.buildingids.push(data.buildingid);
+        for(let buildingid of this.state.buildingids){
+            const newRestroomsResponse = request('GET', '/restroom?gender=' + this.props.gender + '&buildingid=' + buildingid);
+            allRestrooms = allRestrooms.concat(JSON.parse(newRestroomsResponse.body));
+        }
+        this.setState({restrooms: allRestrooms });
     }
 
     getStyle(gender){
@@ -65,22 +82,14 @@ class monitoredMeetingRooms extends Component {
             return styleWomens;
     }
 
-    // getDivText(gender){
-    //     if(gender === 'male')
-    //         return "Drop Buildings Here to see Men's room statuses";
-    //     else if(gender === 'female')
-    //         return "Drop Buildings Here to see Women's room statuses";
-    // }
-
     render() {
         const {gender} = this.props;
         return (
             <div onDragOver={this.allowDrop} onDrop={this.drop} style={this.getStyle(gender)}>
-                {/*{this.getDivText(gender)}*/}
                 <MapComponents component={Restroom} for={this.state.restrooms} />
             </div>
         );
     }
 }
 
-export default monitoredMeetingRooms;
+export default monitoredRestRooms;

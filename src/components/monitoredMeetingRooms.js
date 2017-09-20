@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MapComponents from 'react-map-components';
 import Meetingroom from './meetingroom';
 import Background from '../images/meetingroom.png';
-var request = require('sync-request');
+let request = require('sync-request');
 
 const style = {
     background: '#525441',
