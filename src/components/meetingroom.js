@@ -88,19 +88,19 @@ export default class meetingroom extends Component {
         this.reserve = this.reserve.bind(this);
     }
     componentDidMount() {
-        setInterval(function() {
-            const meetingroomResponse = request.get('/meetingroom/' + this.props.meetingroomid);
-            meetingroomResponse.end(function(err, res) {
-                if(err) {
-                    console.error("error occurred:" + err);
-                    return "error";
-                }
-                this.setState({occupantcount: res.body[0].occupantcount, reserved: res.body[0].reserved});
-            }.bind(this));
-        }.bind(this), 5000);
+        // setInterval(function() {
+        //     const meetingroomResponse = request.get('/meetingroom/' + this.props.meetingroomid);
+        //     meetingroomResponse.end(function(err, res) {
+        //         if(err) {
+        //             console.error("error occurred:" + err);
+        //             return "error";
+        //         }
+        //         this.setState({occupantcount: res.body[0].occupantcount, reserved: res.body[0].reserved});
+        //     }.bind(this));
+        // }.bind(this), 5000);
     }
     componentWillUnmount() {
-        clearInterval(this.interval);
+        // clearInterval(this.interval);
     }
     drag(e){
         e.dataTransfer.setData('text', e.target.id);
