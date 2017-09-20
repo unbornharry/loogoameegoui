@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import request from 'superagent';
 
 const restroomStyle = {
     float: 'left',
@@ -10,8 +9,7 @@ const restroomStyle = {
     textDecoration: 'none',
     width: '300px',
     height: '50px',
-    margin: '5px',
-
+    margin: '5px'
 };
 
 const restroomHoverStyle = {
@@ -87,20 +85,8 @@ export default class restroom extends Component {
         this.getRestroomStyle = this.getRestroomStyle.bind(this);
         this.getIconStyle = this.getIconStyle.bind(this);
     }
-    componentDidMount() {
-        setInterval(function() {
-            const restroomResponse = request.get('/restroom/' + this.props.restroomid);
-            restroomResponse.end(function(err, res) {
-                if(err) {
-                    console.error("error occurred:" + err);
-                    return "error";
-                }
-                this.setState({status: res.body[0].status});
-            }.bind(this));
-        }.bind(this), 5000);
-    }
-    componentWillUnmount() {
-        clearInterval(this.interval);
+    componentWillReceiveProps(newProps) {
+        this.setState({status: newProps.status});
     }
     drag(e){
         e.dataTransfer.setData('text', e.target.id);

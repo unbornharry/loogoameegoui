@@ -14,7 +14,8 @@
     "webpack-dev-server": "^2.7.1",
     "react-circular-progressbar": "^0.1.4",
     "concurrently": "^3.5.0",
-    "http-proxy": "^1.16.2"
+    "http-proxy": "^1.16.2",
+    "sync-request": "^4.1.0"
   },
   "scripts": {
     "start": "set PORT=5001 && react-scripts start",

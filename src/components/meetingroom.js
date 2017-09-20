@@ -82,28 +82,12 @@ export default class meetingroom extends Component {
     constructor(props){
         super(props);
         this.state = {hover: false, reserved: this.props.reserved, occupantcount: this.props.occupantcount};
-        this.drag = this.drag.bind(this);
         this.hover = this.hover.bind(this);
         this.unHover = this.unHover.bind(this);
         this.reserve = this.reserve.bind(this);
     }
-    componentDidMount() {
-        setInterval(function() {
-            const meetingroomResponse = request.get('/meetingroom/' + this.props.meetingroomid);
-            meetingroomResponse.end(function(err, res) {
-                if(err) {
-                    console.error("error occurred:" + err);
-                    return "error";
-                }
-                this.setState({occupantcount: res.body[0].occupantcount, reserved: res.body[0].reserved});
-            }.bind(this));
-        }.bind(this), 5000);
-    }
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-    drag(e){
-        e.dataTransfer.setData('text', e.target.id);
+    componentWillReceiveProps(newProps) {
+        this.setState({reserved: newProps.reserved, occupantcount: newProps.occupantcount});
     }
     hover(){
         this.setState({hover: true});
@@ -153,7 +137,7 @@ export default class meetingroom extends Component {
         }
     }
     render() {
-        let { meetingroomid, meetingroomname, meetingroomdisplayname, occupancy } = this.props;
+        let { meetingroomid, meetingroomname, meetingroomdisplayname, occupancy} = this.props;
         return (
             <div type="meetingroom"
                  id={meetingroomid}

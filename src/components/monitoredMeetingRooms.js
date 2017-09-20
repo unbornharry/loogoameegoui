@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MapComponents from 'react-map-components';
 import Meetingroom from './meetingroom';
 import Background from '../images/meetingroom.png';
+let request = require('sync-request');
 
 const style = {
     background: '#525441',
@@ -21,7 +22,7 @@ class monitoredMeetingRooms extends Component {
 
     constructor(props){
         super(props);
-        this.state = {meetingrooms: []};
+        this.state = {buildingids: [], meetingrooms: []};
         this.drop = this.drop.bind(this);
     }
 
@@ -29,14 +30,30 @@ class monitoredMeetingRooms extends Component {
         e.preventDefault();
     }
 
+    componentDidMount() {
+        setInterval(function() {
+            let allMeetingrooms = [];
+            for(let buildingid of this.state.buildingids){
+                const newMeetingroomsResponse = request('GET', '/meetingroom?buildingid=' + buildingid);
+                allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
+            }
+            this.setState({meetingrooms: allMeetingrooms });
+        }.bind(this), 5000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     drop(e){
         let data = JSON.parse(e.dataTransfer.getData('text'));
-        fetch('/meetingroom?buildingid=' + data.buildingid)
-            .then(res => res.json())
-            .then(newmeetingrooms => {
-                let meetingrooms = this.state.meetingrooms.concat(newmeetingrooms);
-                this.setState({ meetingrooms });
-            });
+        let allMeetingrooms = [];
+        this.state.buildingids.push(data.buildingid);
+        for(let buildingid of this.state.buildingids){
+            const newMeetingroomsResponse = request('GET', '/meetingroom?buildingid=' + buildingid);
+            allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
+        }
+        this.setState({meetingrooms: allMeetingrooms });
     }
 
     render() {
