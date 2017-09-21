@@ -40,23 +40,32 @@ class monitoredRestRooms extends Component {
 
     constructor(props){
         super(props);
-        this.state = {restrooms: [], buildingids: []};
+        this.state = {restrooms: [], droppeditems: []};
         this.drop = this.drop.bind(this);
         this.getStyle = this.getStyle.bind(this);
+        this.getRestRooms = this.getRestRooms.bind(this);
     }
 
     allowDrop(e) {
         e.preventDefault();
     }
 
+    getRestRooms(){
+        let allRestrooms = [];
+        for(let item of this.state.droppeditems){
+            let newRestroomsResponse;
+            if(item.type === 'building')
+                newRestroomsResponse = request('GET', '/restroom?gender=' + this.props.gender + '&buildingid=' + item.id);
+            else if(item.type === 'floor')
+                newRestroomsResponse = request('GET', '/restroom?gender=' + this.props.gender + '&floorid=' + item.id);
+            allRestrooms = allRestrooms.concat(JSON.parse(newRestroomsResponse.body));
+        }
+        return allRestrooms;
+    }
+
     componentDidMount() {
         setInterval(function() {
-            let allRestrooms = [];
-            for(let buildingid of this.state.buildingids){
-                const newRestroomsResponse = request('GET', '/restroom?gender=' + this.props.gender + '&buildingid=' + buildingid);
-                allRestrooms = allRestrooms.concat(JSON.parse(newRestroomsResponse.body));
-            }
-            this.setState({restrooms: allRestrooms });
+            this.setState({restrooms: this.getRestRooms()});
         }.bind(this), 5000);
     }
 
@@ -66,13 +75,11 @@ class monitoredRestRooms extends Component {
 
     drop(e){
         let data = JSON.parse(e.dataTransfer.getData('text'));
-        let allRestrooms = [];
-        this.state.buildingids.push(data.buildingid);
-        for(let buildingid of this.state.buildingids){
-            const newRestroomsResponse = request('GET', '/restroom?gender=' + this.props.gender + '&buildingid=' + buildingid);
-            allRestrooms = allRestrooms.concat(JSON.parse(newRestroomsResponse.body));
-        }
-        this.setState({restrooms: allRestrooms });
+        if(data.buildingid)
+            this.state.droppeditems.push({type: 'building', id: data.buildingid});
+        else if (data.floorid)
+            this.state.droppeditems.push({type: 'floor', id: data.floorid});
+        this.setState({restrooms: this.getRestRooms()});
     }
 
     getStyle(gender){

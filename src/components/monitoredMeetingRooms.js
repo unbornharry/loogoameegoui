@@ -22,22 +22,31 @@ class monitoredMeetingRooms extends Component {
 
     constructor(props){
         super(props);
-        this.state = {buildingids: [], meetingrooms: []};
+        this.state = {droppeditems: [], meetingrooms: []};
         this.drop = this.drop.bind(this);
+        this.getMeetingRooms = this.getMeetingRooms.bind(this);
     }
 
     allowDrop(e) {
         e.preventDefault();
     }
 
+    getMeetingRooms(){
+        let allMeetingrooms = [];
+        for(let item of this.state.droppeditems){
+            let newMeetingroomsResponse;
+            if(item.type === 'building')
+                newMeetingroomsResponse = request('GET', '/meetingroom?gender=' + this.props.gender + '&buildingid=' + item.id);
+            else if(item.type === 'floor')
+                newMeetingroomsResponse = request('GET', '/meetingroom?gender=' + this.props.gender + '&floorid=' + item.id);
+            allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
+        }
+        return allMeetingrooms;
+    }
+
     componentDidMount() {
         setInterval(function() {
-            let allMeetingrooms = [];
-            for(let buildingid of this.state.buildingids){
-                const newMeetingroomsResponse = request('GET', '/meetingroom?buildingid=' + buildingid);
-                allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
-            }
-            this.setState({meetingrooms: allMeetingrooms });
+            this.setState({meetingrooms: this.getMeetingRooms()});
         }.bind(this), 5000);
     }
 
@@ -46,14 +55,13 @@ class monitoredMeetingRooms extends Component {
     }
 
     drop(e){
+
         let data = JSON.parse(e.dataTransfer.getData('text'));
-        let allMeetingrooms = [];
-        this.state.buildingids.push(data.buildingid);
-        for(let buildingid of this.state.buildingids){
-            const newMeetingroomsResponse = request('GET', '/meetingroom?buildingid=' + buildingid);
-            allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
-        }
-        this.setState({meetingrooms: allMeetingrooms });
+        if(data.buildingid)
+            this.state.droppeditems.push({type: 'building', id: data.buildingid});
+        else if (data.floorid)
+            this.state.droppeditems.push({type: 'floor', id: data.floorid});
+        this.setState({meetingrooms: this.getMeetingRooms()});
     }
 
     render() {

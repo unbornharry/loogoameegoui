@@ -4,7 +4,7 @@ import Mapcomponents from 'react-map-components';
 import HTML5Backend from 'react-dnd-html5-backend';
 import MonitoredMeetingRooms from './monitoredMeetingRooms';
 import MonitoredRestRooms from './monitoredRestRooms';
-import Rightpane from './rightpane';
+import RightPane from './rightpane';
 
  class container extends Component {
     render() {
@@ -14,7 +14,7 @@ import Rightpane from './rightpane';
                 <div>
                     <Mapcomponents component={MonitoredRestRooms} for={genders} />
                     <MonitoredMeetingRooms />
-                    <Rightpane />
+                    <RightPane />
                 </div>
             </DragDropContextProvider>
         );
