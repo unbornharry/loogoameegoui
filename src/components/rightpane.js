@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Building from './building';
+import Floor from './floor';
 import MapComponents from 'react-map-components';
 import buildingImage from '../images/building.png';
 
@@ -34,8 +35,9 @@ class rightpane extends Component {
 
     constructor(props){
         super(props);
-        this.state = {buildings: []};
-        this.getBuildings = this.getBuildings.bind(this)
+        this.state = {buildings: [], listToShow : "buildings"};
+        this.getBuildings = this.getBuildings.bind(this);
+        this.handler = this.handler.bind(this);
     }
 
     componentDidMount() {
@@ -48,10 +50,24 @@ class rightpane extends Component {
         const querystring = e.target.value;
         fetch('/building?querystring=' + querystring)
             .then(res => res.json())
-            .then(buildings => this.setState({ buildings }));
+            .then(buildings => this.setState({ buildings: buildings, listToShow: "buildings" }));
+
     }
 
+    handler(e){
+        e.preventDefault();
+        let buildingid = e.target.parentNode.id;
+        fetch('/floor?buildingid=' + buildingid)
+            .then(res => res.json())
+            .then(floors => this.setState({ floors: floors, listToShow: "floors" }));
+    }
     render() {
+        for(let building of this.state.buildings) { building.handler = this.handler; }
+        let mappedList;
+        if(this.state.listToShow === "buildings")
+            mappedList  = <MapComponents component={Building} for={this.state.buildings} />;
+        else if (this.state.listToShow === "floors")
+            mappedList  = <MapComponents component={Floor} for={this.state.floors} />;
         return (
                 <div style={rightpaneStyle}>
                     <input type="text"
@@ -60,8 +76,8 @@ class rightpane extends Component {
                            placeholder="Filter by building properties"
                            onChange={this.getBuildings}
                     />
-                    <div className="buildinglist">
-                        <MapComponents component={Building} for={this.state.buildings} />
+                    <div className="list">
+                        {mappedList}
                     </div>
                 </div>
         );

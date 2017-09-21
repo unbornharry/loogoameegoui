@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const buildingStyle = {
+const floorStyle = {
     float: 'left',
     background: '#e3e5e6',
     borderRadius: '28px',
@@ -8,29 +8,33 @@ const buildingStyle = {
     fontSize: '20px',
     padding: '10px 20px 20px 20px',
     textDecoration: 'none',
-    width: '200px',
-    height: '100px',
-    margin: '5px'
-};
-
-const buildingHoverStyle = {
-    float: 'left',
-    background: '#4286f4',
-    borderRadius: '28px',
-    color: '#5c455c',
-    fontSize: '20px',
-    padding: '10px 20px 20px 20px',
-    textDecoration: 'none',
-    width: '200px',
-    height: '100px',
+    width: '23vw',
+    height: '30px',
     margin: '5px',
 };
 
-const buildingNameStyle = {
-    fontWeight: 'bolder'
+const floorHoverStyle = {
+    float: 'left',
+    background: '#4286f4',
+    borderRadius: '28px',
+    color: 'black',
+    fontSize: '20px',
+    padding: '10px 20px 20px 20px',
+    textDecoration: 'none',
+    width: '23vw',
+    height: '30px',
+    margin: '5px',
 };
 
-export default class building extends Component {
+const floorNameStyle = {
+    fontWeight: 'bolder',
+    verticalAlign: 'middle',
+    lineHeight: '30px',
+    align: 'center',
+    textAlign: 'center'
+};
+
+export default class floor extends Component {
     constructor(props){
         super(props);
         this.state = {hover: false};
@@ -39,7 +43,7 @@ export default class building extends Component {
         this.unHover = this.unHover.bind(this);
     }
     dragStart(e){
-        let transferData = {"buildingid" : e.target.id };
+        let transferData = {"floorid" : e.target.id };
         e.dataTransfer.setData('text', JSON.stringify(transferData));
     }
     hover(){
@@ -50,29 +54,25 @@ export default class building extends Component {
     }
     style() {
         if (this.state.hover) {
-            return buildingHoverStyle;
+            return floorHoverStyle;
         } else {
-            return buildingStyle;
+            return floorStyle;
         }
     }
     render() {
-        const { buildingid, buildingname, address1, city, state, zip } = this.props;
+        const { floorid, floorname} = this.props;
 
         return (
-            <div type="building"
-                 id={buildingid}
+            <div type="floor"
+                 id={floorid}
                  style={this.style()}
-                 key={buildingname}
+                 key={floorname}
                  draggable='true'
                  onDragStart={this.dragStart}
                  onMouseOver={this.hover}
                  onMouseOut={this.unHover}
                  onClick = {this.props.handler}>
-                <div style={buildingNameStyle}>{buildingname}</div>
-                <div>{address1}</div>
-                <div>{city}</div>
-                <div>{state}</div>
-                <div>{zip}</div>
+                <div style={floorNameStyle}>{floorname}</div>
             </div>
         );
     }
