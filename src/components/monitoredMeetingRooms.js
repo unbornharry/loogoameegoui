@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import MapComponents from 'react-map-components';
 import Meetingroom from './meetingroom';
 import Background from '../images/meetingroom.png';
 let request = require('sync-request');
@@ -24,14 +23,13 @@ class monitoredMeetingRooms extends Component {
         super(props);
         this.state = {droppeditems: [], meetingrooms: []};
         this.drop = this.drop.bind(this);
-        this.getMeetingRooms = this.getMeetingRooms.bind(this);
     }
 
     allowDrop(e) {
         e.preventDefault();
     }
 
-    getMeetingRooms(){
+    getMeetingRooms = () => {
         let allMeetingrooms = [];
         for(let item of this.state.droppeditems){
             let newMeetingroomsResponse;
@@ -41,13 +39,13 @@ class monitoredMeetingRooms extends Component {
                 newMeetingroomsResponse = request('GET', '/meetingroom?gender=' + this.props.gender + '&floorid=' + item.id);
             allMeetingrooms = allMeetingrooms.concat(JSON.parse(newMeetingroomsResponse.body));
         }
-        return allMeetingrooms;
-    }
+        this.setState({meetingrooms: allMeetingrooms});
+    };
 
     componentDidMount() {
-        setInterval(function() {
-            this.setState({meetingrooms: this.getMeetingRooms()});
-        }.bind(this), 5000);
+        setInterval( () => {
+            this.getMeetingRooms();
+        }, 5000);
     }
 
     componentWillUnmount() {
@@ -55,19 +53,18 @@ class monitoredMeetingRooms extends Component {
     }
 
     drop(e){
-
         let data = JSON.parse(e.dataTransfer.getData('text'));
         if(data.buildingid)
             this.state.droppeditems.push({type: 'building', id: data.buildingid});
         else if (data.floorid)
             this.state.droppeditems.push({type: 'floor', id: data.floorid});
-        this.setState({meetingrooms: this.getMeetingRooms()});
+        this.getMeetingRooms();
     }
 
     render() {
         return (
             <div onDragOver={this.allowDrop} onDrop={this.drop} style={style}>
-                <MapComponents component={Meetingroom} for={this.state.meetingrooms} />
+                {this.state && this.state.meetingrooms ? this.state.meetingrooms.map( room => (<Meetingroom {...room} updateParent={this.getMeetingRooms}/>)) : null}
             </div>
         );
     }

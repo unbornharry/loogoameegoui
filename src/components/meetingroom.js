@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import request from 'superagent';
-import CircularProgressbar from 'react-circular-progressbar';
 
 const meetingroomStyle = {
     float: 'left',
-    background: '#e3e5e6',
     borderRadius: '30px',
-    color: 'red',
+    background: 'white',
     fontSize: '18px',
     textDecoration: 'none',
     width: '300px',
     height: '60px',
-    margin: '5px'
+    margin: '5px',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    lineHeight: '60px',
 };
 
 const meetingroomUsedStyle = {
     float: 'left',
-    background: '#e3e5e6',
     borderRadius: '30px',
     color: 'red',
     fontSize: '18px',
@@ -28,19 +28,17 @@ const meetingroomUsedStyle = {
 
 const meetingroomHoverStyle = {
     float: 'left',
-    background: 'white',
-    borderRadius: '30px',
     fontSize: '18px',
+    background: 'white',
     textDecoration: 'none',
-    width: '300px',
-    height: '60px',
-    margin: '5px',
-    boxShadow: '10px 10px 5px #888888'
+    boxShadow: '5px 5px 5px #888888',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    lineHeight: '60px',
 };
 
 const meetingroomAvailableStyle = {
     float: 'left',
-    background: 'white',
     borderRadius: '30px',
     color: 'green',
     fontSize: '18px',
@@ -54,7 +52,6 @@ const meetingroomReservedStyle = {
     float: 'left',
     background: 'yellow',
     borderRadius: '30px',
-    color: 'green',
     fontSize: '18px',
     textDecoration: 'none',
     width: '300px',
@@ -62,32 +59,16 @@ const meetingroomReservedStyle = {
     margin: '5px'
 };
 
-const floatleft = {
-    float: 'left',
-    margin: '0 0 0 10px',
-    verticalAlign: 'middle',
-    lineHeight: '60px',
-    width: '230px',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden'
-};
-
-const floatright = {
-    float: 'right',
-    lineHeight: '60px',
-    verticalAlign: 'middle'
-};
-
-export default class meetingroom extends Component {
+export default class Meetingroom extends Component {
     constructor(props){
         super(props);
-        this.state = {hover: false, reserved: this.props.reserved, occupantcount: this.props.occupantcount};
+        this.state = {hover: false, reserved: this.props.reserved, occupied: this.props.occupied, occupantcount: this.props.occupantcount};
         this.hover = this.hover.bind(this);
         this.unHover = this.unHover.bind(this);
         this.reserve = this.reserve.bind(this);
     }
     componentWillReceiveProps(newProps) {
-        this.setState({reserved: newProps.reserved, occupantcount: newProps.occupantcount});
+        this.setState({reserved: newProps.reserved, occupied: this.props.occupied, occupantcount: newProps.occupantcount});
     }
     hover(){
         this.setState({hover: true});
@@ -96,7 +77,7 @@ export default class meetingroom extends Component {
         this.setState({hover: false});
     }
     reserve() {
-        if (this.state.occupantcount === 0 && this.state.reserved === 'unreserved') {
+        if (this.state.occupied === 0 && this.state.reserved === 'unreserved') {
             const reserveMeetingroomResponse = request.put('/meetingroom/' + this.props.meetingroomid + '/reserve');
             reserveMeetingroomResponse.end(function (err, res) {
                 if (err) {
@@ -108,7 +89,7 @@ export default class meetingroom extends Component {
                 }
             }.bind(this));
         }
-        else if (this.state.occupantcount === 0 && this.state.reserved === 'reserved'){
+        else if (this.state.occupied === 0 && this.state.reserved === 'reserved'){
             const unreserveMeetingroomResponse = request.put('/meetingroom/' + this.props.meetingroomid + '/unreserve');
             unreserveMeetingroomResponse.end(function (err, res) {
                 if (err) {
@@ -121,13 +102,32 @@ export default class meetingroom extends Component {
             }.bind(this));
          }
     }
+    occupy = (e) => {
+        e.preventDefault()
+        const { updateParent } = this.props;
+        const occupyMeetingroomResponse = this.state.occupied ?
+            request.put('/meetingroom/' + this.props.meetingroomid + '/unoccupy'):
+            request.put('/meetingroom/' + this.props.meetingroomid + '/occupy');
+        occupyMeetingroomResponse.end(function (err, res) {
+            if (err) {
+                console.error("error occurred:" + err);
+                return "error";
+            }
+            if (res.statusCode === 200) {
+                this.state.occupied ? this.setState({occupied: 0}) : this.setState({occupied: 1});
+            }
+            updateParent();
+        }.bind(this));
+    };
     getmeetingroomStyle(){
-        if(this.state.occupantcount === 0 && this.state.reserved === 'unreserved')
+        if(this.state.occupied === 0 && this.state.reserved === 'unreserved')
             return meetingroomAvailableStyle;
-        else if (this.state.occupantcount === 0 && this.state.reserved === 'reserved')
+        else if (this.state.occupied === 0 && this.state.reserved === 'reserved')
             return meetingroomReservedStyle;
-        else if (this.state.occupantcount !== 0)
+        else if (this.state.occupied !== 0)
             return meetingroomUsedStyle;
+        else
+            return meetingroomStyle;
     }
     getmeetingroomHoverStyle(){
         if (this.state.hover) {
@@ -139,21 +139,16 @@ export default class meetingroom extends Component {
     render() {
         let { meetingroomid, meetingroomname, meetingroomdisplayname, occupancy} = this.props;
         return (
-            <div type="meetingroom"
-                 id={meetingroomid}
-                 style={{...this.getmeetingroomHoverStyle(), ...this.getmeetingroomStyle() }}
-                 key={meetingroomname}
-                 onMouseOver={this.hover}
-                 onMouseOut={this.unHover}
-                onDoubleClick={this.reserve}>
-                <div style={floatleft}>{meetingroomdisplayname} ({occupancy})</div>
-                <CircularProgressbar style={floatright}
-                    percentage={Math.floor(this.state.occupantcount/this.props.occupancy * 100) > 100 ? 100 : Math.floor(this.state.occupantcount/this.props.occupancy * 100)}
-                    strokeWidth={15}
-                    initialAnimation={true}
-                    classForPercentage={(percent) => percent < 100 ? 'incomplete' : 'complete'}
-                    textForPercentage={(pct) => this.state.occupantcount}
-                />
+            <div
+                id={meetingroomid}
+                style={{...this.getmeetingroomHoverStyle(), ...this.getmeetingroomStyle() }}
+                key={meetingroomname}
+                onMouseOver={this.hover}
+                onMouseOut={this.unHover}
+                onDoubleClick={this.reserve}
+                onContextMenu={this.occupy}
+            >
+                <div>{meetingroomdisplayname} ({occupancy})</div>
             </div>
         );
     }
